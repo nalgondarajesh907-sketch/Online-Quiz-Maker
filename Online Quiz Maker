@@ -1,1 +1,4241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Quizly - Online Quiz Maker</title>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+    background:#f5f7fb;
+    color:#172033;
+
+    transition:.3s;
+}
+
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark{
+    background:#10131c;
+    color:#f4f6fb;
+}
+
+body.dark .navbar,
+body.dark .card,
+body.dark .modal-box,
+body.dark .quiz-box,
+body.dark .stat-card{
+    background:#181c27;
+    border-color:#292e3c;
+}
+
+body.dark input,
+body.dark textarea,
+body.dark select{
+    background:#11151e;
+    color:white;
+    border-color:#343a49;
+}
+
+body.dark .hero{
+    background:
+    radial-gradient(circle at 80% 20%,#30215e,transparent 35%),
+    #151927;
+}
+
+body.dark .feature-card,
+body.dark .quiz-card{
+    background:#181c27;
+    border-color:#292e3c;
+}
+
+body.dark .question-option{
+    background:#202532;
+    border-color:#343a49;
+}
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root{
+
+    --primary:#6847f5;
+    --primary-dark:#5133d4;
+
+    --secondary:#8f6cff;
+
+    --success:#16a36b;
+    --danger:#e5485d;
+    --warning:#f3a735;
+
+    --text:#172033;
+    --muted:#778095;
+
+    --border:#e4e8f0;
+
+    --white:#ffffff;
+
+    --shadow:
+    0 15px 45px rgba(31,41,61,.08);
+
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+    position:sticky;
+    top:0;
+
+    z-index:100;
+
+    height:72px;
+
+    background:white;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 6%;
+
+    backdrop-filter:blur(20px);
+}
+
+.logo{
+
+    display:flex;
+    align-items:center;
+
+    gap:10px;
+
+    font-size:22px;
+
+    font-weight:900;
+
+    color:var(--primary);
+}
+
+.logo-icon{
+
+    width:38px;
+    height:38px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:11px;
+
+    color:white;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    box-shadow:
+    0 7px 20px rgba(104,71,245,.25);
+}
+
+.nav-links{
+
+    display:flex;
+
+    gap:30px;
+
+    list-style:none;
+}
+
+.nav-links a{
+
+    font-size:13px;
+
+    font-weight:700;
+
+    color:#70798c;
+
+    transition:.2s;
+}
+
+.nav-links a:hover{
+
+    color:var(--primary);
+}
+
+.nav-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+
+    border:none;
+
+    padding:11px 18px;
+
+    border-radius:9px;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    transition:.25s;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:7px;
+}
+
+.btn-primary{
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    box-shadow:
+    0 8px 20px rgba(104,71,245,.2);
+}
+
+.btn-primary:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 12px 25px rgba(104,71,245,.3);
+}
+
+.btn-outline{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    color:#4e586d;
+}
+
+.btn-outline:hover{
+
+    border-color:var(--primary);
+
+    color:var(--primary);
+}
+
+.btn-danger{
+
+    background:#fff0f2;
+
+    color:var(--danger);
+}
+
+.btn-success{
+
+    background:#e8faf2;
+
+    color:var(--success);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    min-height:650px;
+
+    display:flex;
+
+    align-items:center;
+
+    background:
+
+    radial-gradient(
+        circle at 85% 20%,
+        #e8e0ff,
+        transparent 32%
+    ),
+
+    linear-gradient(
+        135deg,
+        #faf9ff,
+        #f0edff
+    );
+
+    overflow:hidden;
+}
+
+.hero-container{
+
+    width:88%;
+
+    max-width:1200px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+    1.05fr
+    .95fr;
+
+    gap:70px;
+
+    align-items:center;
+}
+
+.badge{
+
+    display:inline-flex;
+
+    padding:7px 13px;
+
+    border-radius:50px;
+
+    background:#eeeaff;
+
+    color:var(--primary);
+
+    font-size:10px;
+
+    font-weight:900;
+
+    letter-spacing:.7px;
+}
+
+.hero h1{
+
+    font-size:62px;
+
+    line-height:1.04;
+
+    letter-spacing:-3px;
+
+    margin:20px 0;
+}
+
+.hero h1 span{
+
+    color:var(--primary);
+}
+
+.hero p{
+
+    max-width:580px;
+
+    color:var(--muted);
+
+    font-size:16px;
+
+    line-height:1.8;
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:30px;
+}
+
+
+/* =========================================================
+   HERO QUIZ PREVIEW
+========================================================= */
+
+.preview{
+
+    background:white;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 30px 80px rgba(53,43,105,.16);
+
+    transform:rotate(1.5deg);
+
+    animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+
+    0%,100%{
+        transform:translateY(0) rotate(1.5deg);
+    }
+
+    50%{
+        transform:translateY(-10px) rotate(1.5deg);
+    }
+}
+
+.preview-inner{
+
+    border:1px solid #edf0f5;
+
+    border-radius:12px;
+
+    padding:25px;
+}
+
+.preview-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#7b8497;
+
+    font-size:10px;
+
+    font-weight:800;
+}
+
+.progress{
+
+    height:7px;
+
+    background:#eceef3;
+
+    border-radius:20px;
+
+    margin:14px 0 25px;
+
+    overflow:hidden;
+}
+
+.progress span{
+
+    display:block;
+
+    height:100%;
+
+    width:65%;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    border-radius:20px;
+}
+
+.preview small{
+
+    color:var(--primary);
+
+    font-size:9px;
+
+    font-weight:900;
+}
+
+.preview h3{
+
+    font-size:20px;
+
+    margin:10px 0 20px;
+}
+
+.preview-option{
+
+    padding:13px;
+
+    border:1px solid #e2e6ee;
+
+    border-radius:9px;
+
+    margin:9px 0;
+
+    font-size:12px;
+}
+
+.preview-option.active{
+
+    border-color:var(--primary);
+
+    background:#f0edff;
+
+    color:var(--primary);
+
+    font-weight:800;
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section{
+
+    width:88%;
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:75px 0;
+}
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:40px;
+}
+
+.section-title small{
+
+    color:var(--primary);
+
+    font-weight:900;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+.section-title h2{
+
+    font-size:34px;
+
+    margin:7px 0;
+}
+
+.section-title p{
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.features{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+}
+
+.feature-card{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    padding:28px;
+
+    border-radius:15px;
+
+    transition:.25s;
+
+    box-shadow:var(--shadow);
+}
+
+.feature-card:hover{
+
+    transform:translateY(-6px);
+}
+
+.feature-icon{
+
+    width:55px;
+
+    height:55px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:14px;
+
+    font-size:25px;
+
+    background:#eeeaff;
+
+    margin-bottom:20px;
+}
+
+.feature-card h3{
+
+    margin-bottom:8px;
+
+    font-size:17px;
+}
+
+.feature-card p{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   QUIZ CARDS
+========================================================= */
+
+.quiz-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+}
+
+.quiz-card{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    padding:18px;
+
+    transition:.25s;
+
+    cursor:pointer;
+
+    box-shadow:var(--shadow);
+}
+
+.quiz-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+    0 20px 45px rgba(31,41,61,.12);
+}
+
+.quiz-cover{
+
+    height:140px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:12px;
+
+    font-size:48px;
+
+    margin-bottom:18px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #ece7ff,
+        #f5f2ff
+    );
+}
+
+.quiz-category{
+
+    font-size:9px;
+
+    color:var(--primary);
+
+    font-weight:900;
+
+    letter-spacing:.8px;
+}
+
+.quiz-card h3{
+
+    font-size:17px;
+
+    margin:7px 0;
+}
+
+.quiz-card p{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-bottom:12px;
+}
+
+.quiz-meta{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#737c8e;
+
+    font-size:10px;
+
+    font-weight:700;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+
+    background:#1c2130;
+
+    color:white;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    padding:45px 8%;
+
+    text-align:center;
+}
+
+.stat h3{
+
+    font-size:31px;
+}
+
+.stat p{
+
+    color:#aeb4c1;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   APP CONTAINER
+========================================================= */
+
+.app{
+
+    display:none;
+
+    min-height:calc(100vh - 72px);
+
+    padding:50px 6%;
+}
+
+.app.active{
+
+    display:block;
+}
+
+.app-header{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+}
+
+.app-header h1{
+
+    font-size:32px;
+}
+
+.app-header p{
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard-grid{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:16px;
+
+    margin-bottom:25px;
+}
+
+.stat-card{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:13px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+}
+
+.stat-card small{
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    font-weight:800;
+}
+
+.stat-card h2{
+
+    margin-top:7px;
+
+    font-size:27px;
+}
+
+.dashboard-main{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+    1.4fr .8fr;
+
+    gap:20px;
+}
+
+.card{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:15px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+}
+
+.card h2{
+
+    font-size:18px;
+
+    margin-bottom:20px;
+}
+
+.activity{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:13px 0;
+
+    border-bottom:1px solid #edf0f4;
+}
+
+.activity-icon{
+
+    width:35px;
+
+    height:35px;
+
+    border-radius:9px;
+
+    display:grid;
+
+    place-items:center;
+
+    background:#eeeaff;
+}
+
+
+/* =========================================================
+   CREATE QUIZ
+========================================================= */
+
+.creator{
+
+    max-width:900px;
+
+    margin:auto;
+}
+
+.creator-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    margin-bottom:25px;
+}
+
+.creator-top h1{
+
+    font-size:32px;
+
+    margin-top:8px;
+}
+
+.form-group{
+
+    margin-bottom:17px;
+}
+
+.form-group label{
+
+    display:block;
+
+    font-size:11px;
+
+    font-weight:900;
+
+    margin-bottom:7px;
+}
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid var(--border);
+
+    border-radius:9px;
+
+    outline:none;
+
+    background:white;
+
+    color:var(--text);
+
+    transition:.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:
+    0 0 0 3px rgba(104,71,245,.08);
+}
+
+.question-builder{
+
+    margin-top:30px;
+}
+
+.question-item{
+
+    background:#fafbfe;
+
+    border:1px solid var(--border);
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-bottom:15px;
+}
+
+body.dark .question-item{
+
+    background:#131722;
+}
+
+.question-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:15px;
+}
+
+.question-header b{
+
+    font-size:12px;
+}
+
+.option-builder{
+
+    display:grid;
+
+    grid-template-columns:
+    25px 1fr;
+
+    gap:8px;
+
+    align-items:center;
+
+    margin-top:8px;
+}
+
+.option-builder input[type=radio]{
+
+    width:auto;
+}
+
+.builder-actions{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:25px;
+}
+
+
+/* =========================================================
+   QUIZ PLAYER
+========================================================= */
+
+.quiz-player{
+
+    max-width:850px;
+
+    margin:40px auto;
+}
+
+.quiz-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.quiz-top small{
+
+    color:var(--primary);
+
+    font-weight:900;
+}
+
+.quiz-top span{
+
+    font-size:11px;
+
+    color:var(--muted);
+}
+
+.quiz-box{
+
+    background:white;
+
+    border:1px solid var(--border);
+
+    border-radius:17px;
+
+    padding:32px;
+
+    box-shadow:var(--shadow);
+}
+
+.quiz-box h2{
+
+    font-size:25px;
+
+    margin:20px 0;
+}
+
+.question-option{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:16px;
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    margin:10px 0;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.question-option:hover{
+
+    border-color:var(--primary);
+
+    background:#faf9ff;
+}
+
+.question-option.selected{
+
+    background:#eeeaff;
+
+    border-color:var(--primary);
+
+    color:var(--primary);
+
+    font-weight:800;
+}
+
+.question-option input{
+
+    width:auto;
+}
+
+.quiz-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:25px;
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.result{
+
+    max-width:600px;
+
+    margin:70px auto;
+
+    text-align:center;
+}
+
+.result-icon{
+
+    width:75px;
+
+    height:75px;
+
+    margin:auto;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:50%;
+
+    background:#e8faf2;
+
+    color:var(--success);
+
+    font-size:35px;
+
+    margin-bottom:20px;
+}
+
+.result h1{
+
+    font-size:35px;
+}
+
+.result p{
+
+    color:var(--muted);
+
+    margin:8px 0;
+}
+
+.score{
+
+    width:170px;
+
+    height:170px;
+
+    border-radius:50%;
+
+    margin:30px auto;
+
+    display:grid;
+
+    place-content:center;
+
+    border:14px solid #eeeaff;
+
+    border-top-color:var(--primary);
+}
+
+.score strong{
+
+    font-size:38px;
+}
+
+.score small{
+
+    color:var(--muted);
+
+    font-size:11px;
+}
+
+.result-stats{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    border-top:1px solid var(--border);
+
+    border-bottom:1px solid var(--border);
+
+    padding:20px;
+
+    margin-bottom:25px;
+}
+
+.result-stats b{
+
+    display:block;
+
+    font-size:23px;
+}
+
+.result-stats span{
+
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(10,13,20,.65);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:200;
+
+    padding:20px;
+}
+
+.modal.show{
+
+    display:flex;
+}
+
+.modal-box{
+
+    width:100%;
+
+    max-width:430px;
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:28px;
+
+    position:relative;
+}
+
+.modal-close{
+
+    position:absolute;
+
+    top:15px;
+
+    right:18px;
+
+    background:none;
+
+    border:0;
+
+    font-size:23px;
+
+    color:#7d8492;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    background:#171b27;
+
+    color:#aeb4c2;
+
+    padding:35px 6%;
+
+    text-align:center;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+
+    position:fixed;
+
+    right:25px;
+
+    bottom:25px;
+
+    background:#202633;
+
+    color:white;
+
+    padding:13px 18px;
+
+    border-radius:9px;
+
+    font-size:12px;
+
+    opacity:0;
+
+    transform:translateY(20px);
+
+    pointer-events:none;
+
+    transition:.3s;
+
+    z-index:500;
+}
+
+.toast.show{
+
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px){
+
+    .hero-container{
+
+        grid-template-columns:1fr;
+
+        gap:45px;
+    }
+
+    .hero h1{
+
+        font-size:48px;
+    }
+
+    .features,
+    .quiz-grid{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .dashboard-grid{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .dashboard-main{
+
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .navbar{
+
+        padding:0 4%;
+    }
+
+    .nav-links{
+
+        display:none;
+    }
+
+    .hero{
+
+        padding:70px 0;
+    }
+
+    .hero-container{
+
+        width:90%;
+    }
+
+    .hero h1{
+
+        font-size:40px;
+    }
+
+    .hero-buttons{
+
+        flex-direction:column;
+    }
+
+    .features,
+    .quiz-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+
+        grid-template-columns:
+        repeat(2,1fr);
+
+        gap:25px;
+    }
+
+    .dashboard-grid{
+
+        grid-template-columns:1fr 1fr;
+    }
+
+    .creator-top{
+
+        display:block;
+    }
+
+    .quiz-box{
+
+        padding:20px;
+    }
+
+    .quiz-footer{
+
+        gap:10px;
+    }
+
+    .result-stats{
+
+        grid-template-columns:
+        repeat(3,1fr);
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <a href="#" class="logo" onclick="showHome()">
+
+        <span class="logo-icon">Q</span>
+
+        Quizly
+
+    </a>
+
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="#" onclick="showHome()">Home</a>
+        </li>
+
+        <li>
+            <a href="#popular">Quizzes</a>
+        </li>
+
+        <li>
+            <a href="#" onclick="openCreator()">Create Quiz</a>
+        </li>
+
+        <li>
+            <a href="#" onclick="openDashboard()">Dashboard</a>
+        </li>
+
+    </ul>
+
+
+    <div class="nav-actions">
+
+        <button
+            class="btn btn-outline"
+            onclick="toggleDarkMode()"
+        >
+            🌙
+        </button>
+
+        <button
+            class="btn btn-outline"
+            onclick="openLogin()"
+        >
+            Login
+        </button>
+
+        <button
+            class="btn btn-primary"
+            onclick="openRegister()"
+        >
+            Sign up
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     HOME
+===================================================== -->
+
+<section id="homePage">
+
+
+<section class="hero">
+
+<div class="hero-container">
+
+
+<div>
+
+<span class="badge">
+SMART • SIMPLE • INTERACTIVE
+</span>
+
+
+<h1>
+
+Create.
+Share.<br>
+
+<span>Challenge yourself.</span>
+
+</h1>
+
+
+<p>
+
+Build beautiful online quizzes in minutes.
+Add your own questions, test your knowledge,
+track scores and challenge your friends.
+
+</p>
+
+
+<div class="hero-buttons">
+
+<button
+class="btn btn-primary"
+onclick="openCreator()"
+>
+
+＋ Create a Quiz
+
+</button>
+
+
+<button
+class="btn btn-outline"
+onclick="scrollToPopular()"
+>
+
+▶️ Take a Quiz
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<div class="preview">
+
+<div class="preview-inner">
+
+
+<div class="preview-top">
+
+<span>QUIZLY</span>
+
+<span>QUESTION 4 / 10</span>
+
+</div>
+
+
+<div class="progress">
+
+<span></span>
+
+</div>
+
+
+<small>
+SCIENCE • GENERAL
+</small>
+
+
+<h3>
+
+Which planet is known as
+the Red Planet?
+
+</h3>
+
+
+<div class="preview-option">
+○ Venus
+</div>
+
+
+<div class="preview-option active">
+● Mars ✓
+</div>
+
+
+<div class="preview-option">
+○ Jupiter
+</div>
+
+
+<div class="preview-option">
+○ Mercury
+</div>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- FEATURES -->
+
+<section class="section">
+
+
+<div class="section-title">
+
+<small>WHY QUIZLY?</small>
+
+<h2>Everything you need to make great quizzes</h2>
+
+<p>
+Simple tools. Powerful results.
+</p>
+
+</div>
+
+
+
+<div class="features">
+
+
+<div class="feature-card">
+
+<div class="feature-icon">
+🧠
+</div>
+
+<h3>
+Easy Quiz Creation
+</h3>
+
+<p>
+Create multiple-choice quizzes quickly
+with our simple quiz builder.
+</p>
+
+</div>
+
+
+
+<div class="feature-card">
+
+<div class="feature-icon">
+⚡
+</div>
+
+<h3>
+Instant Results
+</h3>
+
+<p>
+Get your score immediately after
+completing a quiz.
+</p>
+
+</div>
+
+
+
+<div class="feature-card">
+
+<div class="feature-icon">
+📊
+</div>
+
+<h3>
+Track Performance
+</h3>
+
+<p>
+Monitor your quiz activity, scores
+and learning progress.
+</p>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- POPULAR -->
+
+<section class="section" id="popular">
+
+<div class="section-title">
+
+<small>DISCOVER</small>
+
+<h2>Popular Quizzes</h2>
+
+<p>
+Choose a quiz and test your knowledge.
+</p>
+
+</div>
+
+
+<div class="quiz-grid" id="quizGrid">
+
+</div>
+
+</section>
+
+
+
+<!-- STATS -->
+
+<section class="stats">
+
+<div class="stat">
+
+<h3>12K+</h3>
+
+<p>Quizzes Created</p>
+
+</div>
+
+
+<div class="stat">
+
+<h3>85K+</h3>
+
+<p>Questions Answered</p>
+
+</div>
+
+
+<div class="stat">
+
+<h3>32K+</h3>
+
+<p>Active Learners</p>
+
+</div>
+
+
+<div class="stat">
+
+<h3>98%</h3>
+
+<p>Positive Ratings</p>
+
+</div>
+
+</section>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     CREATE QUIZ APP
+===================================================== -->
+
+<section id="creatorPage" class="app">
+
+<div class="creator">
+
+
+<div class="creator-top">
+
+<div>
+
+<span class="badge">
+QUIZ BUILDER
+</span>
+
+<h1>
+Create a New Quiz
+</h1>
+
+</div>
+
+
+<button
+class="btn btn-outline"
+onclick="showHome()"
+>
+← Back
+</button>
+
+</div>
+
+
+
+<div class="card">
+
+
+<div class="form-group">
+
+<label>
+Quiz Title
+</label>
+
+<input
+id="quizTitle"
+placeholder="Example: Java Programming Basics"
+>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Category
+</label>
+
+<select id="quizCategory">
+
+<option>Technology</option>
+
+<option>Science</option>
+
+<option>Programming</option>
+
+<option>General Knowledge</option>
+
+<option>Mathematics</option>
+
+<option>History</option>
+
+</select>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>
+Description
+</label>
+
+<textarea
+id="quizDescription"
+rows="3"
+placeholder="Describe your quiz..."
+></textarea>
+
+</div>
+
+
+
+<div class="question-builder">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+">
+
+<h2>
+Questions
+</h2>
+
+<button
+class="btn btn-outline"
+onclick="addQuestion()"
+>
+＋ Add Question
+</button>
+
+</div>
+
+
+<div id="questionContainer">
+
+</div>
+
+
+</div>
+
+
+<div class="builder-actions">
+
+<button
+class="btn btn-outline"
+onclick="showHome()"
+>
+Cancel
+</button>
+
+
+<button
+class="btn btn-primary"
+onclick="publishQuiz()"
+>
+🚀 Publish Quiz
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     QUIZ PLAYER
+===================================================== -->
+
+<section id="quizPage" class="app">
+
+
+<div class="quiz-player">
+
+
+<div class="quiz-top">
+
+<div>
+
+<small id="playCategory">
+CATEGORY
+</small>
+
+<h1 id="playTitle">
+Quiz
+</h1>
+
+</div>
+
+<span id="questionCounter">
+Question 1 / 5
+</span>
+
+</div>
+
+
+<div class="progress">
+
+<span
+id="playProgress"
+style="width:20%"
+></span>
+
+</div>
+
+
+<div class="quiz-box">
+
+
+<small
+id="questionLabel"
+style="
+color:var(--primary);
+font-weight:900;
+"
+>
+QUESTION 01
+</small>
+
+
+<h2 id="questionText">
+Question text
+</h2>
+
+
+<div id="answerContainer">
+
+</div>
+
+
+<div class="quiz-footer">
+
+
+<button
+id="previousBtn"
+class="btn btn-outline"
+onclick="previousQuestion()"
+>
+← Previous
+</button>
+
+
+<button
+id="nextBtn"
+class="btn btn-primary"
+onclick="nextQuestion()"
+>
+Next →
+</button>
+
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     RESULT
+===================================================== -->
+
+<section id="resultPage" class="app">
+
+
+<div class="result">
+
+
+<div class="card">
+
+
+<div class="result-icon">
+✓
+</div>
+
+
+<span class="badge">
+QUIZ COMPLETED
+</span>
+
+
+<h1 id="resultHeading">
+Excellent Work!
+</h1>
+
+
+<p id="resultMessage">
+You completed the quiz.
+</p>
+
+
+<div class="score">
+
+<strong id="finalScore">
+0%
+</strong>
+
+<small>
+Your Score
+</small>
+
+</div>
+
+
+<div class="result-stats">
+
+<div>
+
+<b id="correctCount">
+0
+</b>
+
+<span>
+Correct
+</span>
+
+</div>
+
+
+<div>
+
+<b id="wrongCount">
+0
+</b>
+
+<span>
+Wrong
+</span>
+
+</div>
+
+
+<div>
+
+<b id="totalCount">
+0
+</b>
+
+<span>
+Total
+</span>
+
+</div>
+
+</div>
+
+
+<div style="
+display:flex;
+justify-content:center;
+gap:10px;
+">
+
+<button
+class="btn btn-primary"
+onclick="showHome()"
+>
+🏠 Home
+</button>
+
+
+<button
+class="btn btn-outline"
+onclick="openDashboard()"
+>
+📊 Dashboard
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<section id="dashboardPage" class="app">
+
+
+<div class="app-header">
+
+<div>
+
+<span class="badge">
+DASHBOARD
+</span>
+
+<h1>
+My Learning
+</h1>
+
+<p>
+Track your quiz performance.
+</p>
+
+</div>
+
+
+<button
+class="btn btn-primary"
+onclick="openCreator()"
+>
+＋ Create Quiz
+</button>
+
+</div>
+
+
+
+<div class="dashboard-grid">
+
+
+<div class="stat-card">
+
+<small>
+QUIZZES TAKEN
+</small>
+
+<h2 id="dashTaken">
+0
+</h2>
+
+</div>
+
+
+<div class="stat-card">
+
+<small>
+AVERAGE SCORE
+</small>
+
+<h2 id="dashAverage">
+0%
+</h2>
+
+</div>
+
+
+<div class="stat-card">
+
+<small>
+CORRECT ANSWERS
+</small>
+
+<h2 id="dashCorrect">
+0
+</h2>
+
+</div>
+
+
+<div class="stat-card">
+
+<small>
+CREATED QUIZZES
+</small>
+
+<h2 id="dashCreated">
+0
+</h2>
+
+</div>
+
+</div>
+
+
+
+<div class="dashboard-main">
+
+
+<div class="card">
+
+<h2>
+Recent Activity
+</h2>
+
+<div id="activityList">
+
+<p style="color:var(--muted);font-size:12px;">
+No activity yet. Take a quiz to get started!
+</p>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>
+Quick Actions
+</h2>
+
+
+<button
+class="btn btn-primary"
+style="width:100%;margin-bottom:10px"
+onclick="openCreator()"
+>
+＋ Create Quiz
+</button>
+
+
+<button
+class="btn btn-outline"
+style="width:100%;margin-bottom:10px"
+onclick="scrollToPopular()"
+>
+▶️ Explore Quizzes
+</button>
+
+
+<button
+class="btn btn-outline"
+style="width:100%"
+onclick="clearData()"
+>
+Reset Data
+</button>
+
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     LOGIN MODAL
+===================================================== -->
+
+<div
+id="loginModal"
+class="modal"
+>
+
+<div class="modal-box">
+
+
+<button
+class="modal-close"
+onclick="closeModals()"
+>
+×
+</button>
+
+
+<span class="badge">
+WELCOME BACK
+</span>
+
+
+<h2 style="margin:12px 0 5px">
+Sign in to Quizly
+</h2>
+
+
+<p style="
+font-size:12px;
+color:var(--muted);
+margin-bottom:20px;
+">
+Continue creating and taking quizzes.
+</p>
+
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+id="loginEmail"
+type="email"
+placeholder="you@example.com"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input
+id="loginPassword"
+type="password"
+placeholder="••••••••"
+>
+
+</div>
+
+
+<button
+class="btn btn-primary"
+style="width:100%"
+onclick="loginUser()"
+>
+Sign In
+</button>
+
+
+<p style="
+text-align:center;
+font-size:11px;
+margin-top:18px;
+color:var(--muted);
+">
+
+Don't have an account?
+
+<a
+href="#"
+onclick="openRegister()"
+style="
+color:var(--primary);
+font-weight:800;
+"
+>
+Create one
+</a>
+
+</p>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+     REGISTER MODAL
+===================================================== -->
+
+<div
+id="registerModal"
+class="modal"
+>
+
+<div class="modal-box">
+
+
+<button
+class="modal-close"
+onclick="closeModals()"
+>
+×
+</button>
+
+
+<span class="badge">
+GET STARTED
+</span>
+
+
+<h2 style="margin:12px 0 5px">
+Create your account
+</h2>
+
+
+<p style="
+font-size:12px;
+color:var(--muted);
+margin-bottom:20px;
+">
+Join Quizly and start learning.
+</p>
+
+
+<div class="form-group">
+
+<label>Name</label>
+
+<input
+id="registerName"
+placeholder="Your name"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+id="registerEmail"
+type="email"
+placeholder="you@example.com"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input
+id="registerPassword"
+type="password"
+placeholder="Create a password"
+>
+
+</div>
+
+
+<button
+class="btn btn-primary"
+style="width:100%"
+onclick="registerUser()"
+>
+Create Account
+</button>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+id="toast"
+class="toast"
+>
+Success
+</div>
+
+
+
+<footer>
+
+©️ 2026 Quizly — Online Quiz Maker
+
+</footer>
+
+
+
+<script>
+
+/* =========================================================
+   QUIZ DATA
+========================================================= */
+
+const defaultQuizzes = [
+
+{
+    id:1,
+
+    title:"Web Development Basics",
+
+    category:"Technology",
+
+    icon:"💻",
+
+    description:
+    "Test your HTML, CSS and JavaScript fundamentals.",
+
+    questions:[
+
+        {
+            question:
+            "Which language is used to structure a web page?",
+
+            options:[
+                "HTML",
+                "CSS",
+                "Python",
+                "SQL"
+            ],
+
+            answer:0
+        },
+
+        {
+            question:
+            "Which CSS property changes text color?",
+
+            options:[
+                "font-style",
+                "color",
+                "background",
+                "text-align"
+            ],
+
+            answer:1
+        },
+
+        {
+            question:
+            "Which symbol starts a JavaScript single-line comment?",
+
+            options:[
+                "//",
+                "##",
+                "<!--",
+                "**"
+            ],
+
+            answer:0
+        },
+
+        {
+            question:
+            "Which HTML tag creates a hyperlink?",
+
+            options:[
+                "<link>",
+                "<a>",
+                "<href>",
+                "<url>"
+            ],
+
+            answer:1
+        },
+
+        {
+            question:
+            "Which method converts JSON text into an object?",
+
+            options:[
+                "JSON.parse()",
+                "JSON.object()",
+                "JSON.convert()",
+                "JSON.read()"
+            ],
+
+            answer:0
+        }
+
+    ]
+
+},
+
+
+{
+    id:2,
+
+    title:"Science Challenge",
+
+    category:"Science",
+
+    icon:"🔬",
+
+    description:
+    "Test your knowledge of basic science.",
+
+    questions:[
+
+        {
+            question:
+            "Which planet is known as the Red Planet?",
+
+            options:[
+                "Venus",
+                "Mars",
+                "Jupiter",
+                "Mercury"
+            ],
+
+            answer:1
+        },
+
+        {
+            question:
+            "What gas do plants use during photosynthesis?",
+
+            options:[
+                "Oxygen",
+                "Nitrogen",
+                "Carbon dioxide",
+                "Hydrogen"
+            ],
+
+            answer:2
+        },
+
+        {
+            question:
+            "What is the SI unit of force?",
+
+            options:[
+                "Joule",
+                "Pascal",
+                "Newton",
+                "Watt"
+            ],
+
+            answer:2
+        },
+
+        {
+            question:
+            "Which organ pumps blood through the body?",
+
+            options:[
+                "Liver",
+                "Heart",
+                "Lung",
+                "Kidney"
+            ],
+
+            answer:1
+        },
+
+        {
+            question:
+            "At what temperature does water freeze?",
+
+            options:[
+                "0°C",
+                "10°C",
+                "32°C",
+                "100°C"
+            ],
+
+            answer:0
+        }
+
+    ]
+
+},
+
+
+{
+    id:3,
+
+    title:"World Knowledge",
+
+    category:"General Knowledge",
+
+    icon:"🌍",
+
+    description:
+    "Challenge yourself with world knowledge.",
+
+    questions:[
+
+        {
+            question:
+            "What is the capital of Japan?",
+
+            options:[
+                "Seoul",
+                "Tokyo",
+                "Beijing",
+                "Bangkok"
+            ],
+
+            answer:1
+        },
+
+        {
+            question:
+            "Which is the largest ocean?",
+
+            options:[
+                "Atlantic",
+                "Indian",
+                "Pacific",
+                "Arctic"
+            ],
+
+            answer:2
+        },
+
+        {
+            question:
+            "How many continents are commonly recognized?",
+
+            options:[
+                "5",
+                "6",
+                "7",
+                "8"
+            ],
+
+            answer:2
+        },
+
+        {
+            question:
+            "The pyramids of Giza are located in which country?",
+
+            options:[
+                "Greece",
+                "Egypt",
+                "Mexico",
+                "Peru"
+            ],
+
+            answer:1
+        },
+
+        {
+            question:
+            "What currency is used in Japan?",
+
+            options:[
+                "Won",
+                "Yuan",
+                "Yen",
+                "Rupee"
+            ],
+
+            answer:2
+        }
+
+    ]
+
+}
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let quizzes =
+JSON.parse(
+localStorage.getItem("quizlyQuizzes")
+) || defaultQuizzes;
+
+
+let currentQuiz = null;
+
+let currentQuestion = 0;
+
+let selectedAnswers = [];
+
+let questionNumber = 0;
+
+
+/* =========================================================
+   SAVE QUIZZES
+========================================================= */
+
+function saveQuizzes(){
+
+    localStorage.setItem(
+        "quizlyQuizzes",
+        JSON.stringify(quizzes)
+    );
+
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function showHome(){
+
+    hideAllPages();
+
+    document
+    .getElementById("homePage")
+    .style.display="block";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function hideAllPages(){
+
+    document
+    .getElementById("homePage")
+    .style.display="none";
+
+    document
+    .getElementById("creatorPage")
+    .classList.remove("active");
+
+    document
+    .getElementById("quizPage")
+    .classList.remove("active");
+
+    document
+    .getElementById("resultPage")
+    .classList.remove("active");
+
+    document
+    .getElementById("dashboardPage")
+    .classList.remove("active");
+
+}
+
+
+/* =========================================================
+   RENDER QUIZZES
+========================================================= */
+
+function renderQuizzes(){
+
+    const grid =
+    document.getElementById("quizGrid");
+
+    grid.innerHTML="";
+
+
+    quizzes.forEach(quiz=>{
+
+        const card =
+        document.createElement("div");
+
+        card.className="quiz-card";
+
+
+        card.innerHTML=`
+
+            <div class="quiz-cover">
+                ${quiz.icon || "📝"}
+            </div>
+
+            <span class="quiz-category">
+                ${quiz.category.toUpperCase()}
+            </span>
+
+            <h3>
+                ${quiz.title}
+            </h3>
+
+            <p>
+                ${quiz.description || "Test your knowledge."}
+            </p>
+
+            <div class="quiz-meta">
+
+                <span>
+                    ${quiz.questions.length} Questions
+                </span>
+
+                <span>
+                    ⭐ 4.8
+                </span>
+
+            </div>
+        `;
+
+
+        card.onclick=()=>{
+
+            startQuiz(quiz.id);
+
+        };
+
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   CREATE QUIZ
+========================================================= */
+
+function openCreator(){
+
+    hideAllPages();
+
+    document
+    .getElementById("creatorPage")
+    .classList.add("active");
+
+    document
+    .getElementById("questionContainer")
+    .innerHTML="";
+
+    questionNumber=0;
+
+    addQuestion();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   ADD QUESTION
+========================================================= */
+
+function addQuestion(){
+
+    questionNumber++;
+
+
+    const container =
+    document.getElementById(
+        "questionContainer"
+    );
+
+
+    const div =
+    document.createElement("div");
+
+
+    div.className="question-item";
+
+
+    div.innerHTML=`
+
+        <div class="question-header">
+
+            <b>
+                Question ${questionNumber}
+            </b>
+
+            <button
+                class="btn btn-danger"
+                onclick="this.parentElement.parentElement.remove()"
+            >
+                Remove
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Question
+            </label>
+
+            <input
+                class="new-question"
+                placeholder="Enter your question..."
+            >
+
+        </div>
+
+
+        <label>
+            Options
+        </label>
+
+
+        <div class="option-builder">
+
+            <input
+                type="radio"
+                name="correct-${questionNumber}"
+                value="0"
+                checked
+            >
+
+            <input
+                class="new-option"
+                placeholder="Option A"
+            >
+
+        </div>
+
+
+        <div class="option-builder">
+
+            <input
+                type="radio"
+                name="correct-${questionNumber}"
+                value="1"
+            >
+
+            <input
+                class="new-option"
+                placeholder="Option B"
+            >
+
+        </div>
+
+
+        <div class="option-builder">
+
+            <input
+                type="radio"
+                name="correct-${questionNumber}"
+                value="2"
+            >
+
+            <input
+                class="new-option"
+                placeholder="Option C"
+            >
+
+        </div>
+
+
+        <div class="option-builder">
+
+            <input
+                type="radio"
+                name="correct-${questionNumber}"
+                value="3"
+            >
+
+            <input
+                class="new-option"
+                placeholder="Option D"
+            >
+
+        </div>
+
+    `;
+
+
+    container.appendChild(div);
+
+}
+
+
+/* =========================================================
+   PUBLISH QUIZ
+========================================================= */
+
+function publishQuiz(){
+
+    const title =
+    document
+    .getElementById("quizTitle")
+    .value
+    .trim();
+
+
+    const category =
+    document
+    .getElementById("quizCategory")
+    .value;
+
+
+    const description =
+    document
+    .getElementById("quizDescription")
+    .value
+    .trim();
+
+
+    if(!title){
+
+        showToast(
+            "Please enter a quiz title."
+        );
+
+        return;
+
+    }
+
+
+    const items =
+    document.querySelectorAll(
+        ".question-item"
+    );
+
+
+    if(items.length===0){
+
+        showToast(
+            "Please add at least one question."
+        );
+
+        return;
+
+    }
+
+
+    const questions=[];
+
+
+    for(
+        let i=0;
+        i<items.length;
+        i++
+    ){
+
+        const item=items[i];
+
+
+        const question =
+        item
+        .querySelector(".new-question")
+        .value
+        .trim();
+
+
+        const options =
+        [
+            ...item
+            .querySelectorAll(".new-option")
+        ]
+        .map(input=>input.value.trim());
+
+
+        const correct =
+        Number(
+            item
+            .querySelector(
+                "input[type=radio]:checked"
+            )
+            .value
+        );
+
+
+        if(
+            !question ||
+            options.some(
+                option=>!option
+            )
+        ){
+
+            showToast(
+                "Please complete all questions and options."
+            );
+
+            return;
+
+        }
+
+
+        questions.push({
+
+            question,
+
+            options,
+
+            answer:correct
+
+        });
+
+    }
+
+
+    const quiz={
+
+        id:Date.now(),
+
+        title,
+
+        category,
+
+        icon:"📝",
+
+        description,
+
+        questions
+
+    };
+
+
+    quizzes.push(quiz);
+
+
+    saveQuizzes();
+
+
+    showToast(
+        "Quiz published successfully! 🎉"
+    );
+
+
+    setTimeout(()=>{
+
+        startQuiz(quiz.id);
+
+    },700);
+
+}
+
+
+/* =========================================================
+   START QUIZ
+========================================================= */
+
+function startQuiz(id){
+
+    currentQuiz =
+    quizzes.find(
+        quiz=>quiz.id===id
+    );
+
+
+    if(!currentQuiz){
+
+        return;
+
+    }
+
+
+    currentQuestion=0;
+
+
+    selectedAnswers =
+    new Array(
+        currentQuiz.questions.length
+    ).fill(null);
+
+
+    hideAllPages();
+
+
+    document
+    .getElementById("quizPage")
+    .classList.add("active");
+
+
+    document
+    .getElementById("playTitle")
+    .textContent=currentQuiz.title;
+
+
+    document
+    .getElementById("playCategory")
+    .textContent=
+    currentQuiz.category.toUpperCase();
+
+
+    showQuestion();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   SHOW QUESTION
+========================================================= */
+
+function showQuestion(){
+
+    const question =
+    currentQuiz
+    .questions[currentQuestion];
+
+
+    const total =
+    currentQuiz.questions.length;
+
+
+    document
+    .getElementById("questionText")
+    .textContent=
+    question.question;
+
+
+    document
+    .getElementById("questionLabel")
+    .textContent=
+    `QUESTION ${String(currentQuestion+1).padStart(2,"0")}`;
+
+
+    document
+    .getElementById("questionCounter")
+    .textContent=
+    `Question ${currentQuestion+1} / ${total}`;
+
+
+    document
+    .getElementById("playProgress")
+    .style.width=
+    `${((currentQuestion+1)/total)*100}%`;
+
+
+    const container =
+    document
+    .getElementById("answerContainer");
+
+
+    container.innerHTML="";
+
+
+    question.options.forEach(
+        (option,index)=>{
+
+            const label =
+            document.createElement("label");
+
+
+            label.className=
+            "question-option";
+
+
+            if(
+                selectedAnswers[currentQuestion]
+                ===index
+            ){
+
+                label.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            label.innerHTML=`
+
+                <input
+                    type="radio"
+                    name="answer"
+                    value="${index}"
+                    ${
+                        selectedAnswers[currentQuestion]
+                        ===index
+                        ?"checked":""
+                    }
+                >
+
+                <span>
+                    ${option}
+                </span>
+
+            `;
+
+
+            label.onclick=()=>{
+
+                selectedAnswers[
+                    currentQuestion
+                ]=index;
+
+
+                showQuestion();
+
+            };
+
+
+            container.appendChild(label);
+
+        }
+    );
+
+
+    document
+    .getElementById("previousBtn")
+    .disabled=
+    currentQuestion===0;
+
+
+    document
+    .getElementById("nextBtn")
+    .textContent=
+    currentQuestion===
+    total-1
+    ?
+    "Finish Quiz ✓"
+    :
+    "Next →";
+
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+function nextQuestion(){
+
+    if(
+        selectedAnswers[currentQuestion]
+        ===null
+    ){
+
+        showToast(
+            "Please select an answer."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        currentQuestion <
+        currentQuiz.questions.length-1
+    ){
+
+        currentQuestion++;
+
+        showQuestion();
+
+    }
+
+    else{
+
+        finishQuiz();
+
+    }
+
+}
+
+
+/* =========================================================
+   PREVIOUS QUESTION
+========================================================= */
+
+function previousQuestion(){
+
+    if(currentQuestion>0){
+
+        currentQuestion--;
+
+        showQuestion();
+
+    }
+
+}
+
+
+/* =========================================================
+   FINISH QUIZ
+========================================================= */
+
+function finishQuiz(){
+
+    let correct=0;
+
+
+    currentQuiz.questions.forEach(
+        (question,index)=>{
+
+            if(
+                selectedAnswers[index]
+                ===question.answer
+            ){
+
+                correct++;
+
+            }
+
+        }
+    );
+
+
+    const total =
+    currentQuiz.questions.length;
+
+
+    const percentage =
+    Math.round(
+        (correct/total)*100
+    );
+
+
+    const results =
+    JSON.parse(
+        localStorage.getItem(
+            "quizlyResults"
+        )
+    ) || [];
+
+
+    results.push({
+
+        quiz:
+        currentQuiz.title,
+
+        correct,
+
+        total,
+
+        percentage,
+
+        date:
+        new Date()
+        .toLocaleString()
+
+    });
+
+
+    localStorage.setItem(
+        "quizlyResults",
+        JSON.stringify(results)
+    );
+
+
+    document
+    .getElementById("finalScore")
+    .textContent=
+    percentage+"%";
+
+
+    document
+    .getElementById("correctCount")
+    .textContent=
+    correct;
+
+
+    document
+    .getElementById("wrongCount")
+    .textContent=
+    total-correct;
+
+
+    document
+    .getElementById("totalCount")
+    .textContent=
+    total;
+
+
+    let heading;
+
+
+    if(percentage>=80){
+
+        heading="Excellent Work! 🏆";
+
+    }
+
+    else if(percentage>=60){
+
+        heading="Good Job! 👏";
+
+    }
+
+    else{
+
+        heading="Keep Practicing! 💪";
+
+    }
+
+
+    document
+    .getElementById("resultHeading")
+    .textContent=
+    heading;
+
+
+    document
+    .getElementById("resultMessage")
+    .textContent=
+    `You scored ${correct} out of ${total} in ${currentQuiz.title}.`;
+
+
+    hideAllPages();
+
+
+    document
+    .getElementById("resultPage")
+    .classList.add("active");
+
+
+    updateDashboard();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function openDashboard(){
+
+    hideAllPages();
+
+
+    document
+    .getElementById("dashboardPage")
+    .classList.add("active");
+
+
+    updateDashboard();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function updateDashboard(){
+
+    const results =
+    JSON.parse(
+        localStorage.getItem(
+            "quizlyResults"
+        )
+    ) || [];
+
+
+    const created =
+    quizzes.length-
+    defaultQuizzes.length;
+
+
+    const correct =
+    results.reduce(
+        (sum,result)=>
+        sum+result.correct,
+        0
+    );
+
+
+    const average =
+    results.length
+    ?
+    Math.round(
+        results.reduce(
+            (sum,result)=>
+            sum+result.percentage,
+            0
+        )/results.length
+    )
+    :
+    0;
+
+
+    document
+    .getElementById("dashTaken")
+    .textContent=
+    results.length;
+
+
+    document
+    .getElementById("dashAverage")
+    .textContent=
+    average+"%";
+
+
+    document
+    .getElementById("dashCorrect")
+    .textContent=
+    correct;
+
+
+    document
+    .getElementById("dashCreated")
+    .textContent=
+    created;
+
+
+    const activity =
+    document
+    .getElementById("activityList");
+
+
+    if(!results.length){
+
+        activity.innerHTML=`
+
+        <p style="
+        color:var(--muted);
+        font-size:12px;
+        ">
+        No activity yet.
+        Take a quiz to get started!
+        </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    activity.innerHTML="";
+
+
+    results
+    .slice(-5)
+    .reverse()
+    .forEach(result=>{
+
+        const div =
+        document.createElement("div");
+
+
+        div.className="activity";
+
+
+        div.innerHTML=`
+
+            <div class="activity-icon">
+                🏆
+            </div>
+
+            <div>
+
+                <b style="font-size:12px">
+                    ${result.quiz}
+                </b>
+
+                <p style="
+                font-size:10px;
+                color:var(--muted);
+                ">
+                    Score: ${result.percentage}%
+                    · ${result.date}
+                </p>
+
+            </div>
+
+        `;
+
+
+        activity.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function openLogin(){
+
+    closeModals();
+
+    document
+    .getElementById("loginModal")
+    .classList.add("show");
+
+}
+
+
+function loginUser(){
+
+    const email =
+    document
+    .getElementById("loginEmail")
+    .value;
+
+
+    const password =
+    document
+    .getElementById("loginPassword")
+    .value;
+
+
+    if(!email || !password){
+
+        showToast(
+            "Please enter email and password."
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "quizlyUser",
+        email
+    );
+
+
+    closeModals();
+
+
+    showToast(
+        "Login successful! 👋"
+    );
+
+}
+
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+function openRegister(){
+
+    closeModals();
+
+    document
+    .getElementById("registerModal")
+    .classList.add("show");
+
+}
+
+
+function registerUser(){
+
+    const name =
+    document
+    .getElementById("registerName")
+    .value;
+
+
+    const email =
+    document
+    .getElementById("registerEmail")
+    .value;
+
+
+    const password =
+    document
+    .getElementById("registerPassword")
+    .value;
+
+
+    if(
+        !name ||
+        !email ||
+        !password
+    ){
+
+        showToast(
+            "Please complete all fields."
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "quizlyUser",
+        JSON.stringify({
+            name,
+            email
+        })
+    );
+
+
+    closeModals();
+
+
+    showToast(
+        `Welcome to Quizly, ${name}! 🎉`
+    );
+
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function closeModals(){
+
+    document
+    .querySelectorAll(".modal")
+    .forEach(modal=>{
+
+        modal.classList.remove(
+            "show"
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleDarkMode(){
+
+    document
+    .body
+    .classList
+    .toggle("dark");
+
+
+    localStorage.setItem(
+        "quizlyDark",
+        document
+        .body
+        .classList
+        .contains("dark")
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR DATA
+========================================================= */
+
+function clearData(){
+
+    if(
+        confirm(
+            "Reset quiz results and custom quizzes?"
+        )
+    ){
+
+        localStorage.removeItem(
+            "quizlyResults"
+        );
+
+        localStorage.removeItem(
+            "quizlyQuizzes"
+        );
+
+
+        quizzes=[
+            ...defaultQuizzes
+        ];
+
+
+        updateDashboard();
+
+        renderQuizzes();
+
+
+        showToast(
+            "Data reset successfully."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+    const toast =
+    document.getElementById(
+        "toast"
+    );
+
+
+    toast.textContent=message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(()=>{
+
+        toast.classList.remove(
+            "show"
+        );
+
+    },2500);
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function scrollToPopular(){
+
+    showHome();
+
+
+    setTimeout(()=>{
+
+        document
+        .getElementById("popular")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+    },100);
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+
+        renderQuizzes();
+
+
+        if(
+            localStorage.getItem(
+                "quizlyDark"
+            )==="true"
+        ){
+
+            document
+            .body
+            .classList
+            .add("dark");
+
+        }
+
+        showHome();
+
+    }
+);
+
+
+/* =========================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    event=>{
+
+        if(
+            event.target.classList
+            .contains("modal")
+        ){
+
+            closeModals();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
